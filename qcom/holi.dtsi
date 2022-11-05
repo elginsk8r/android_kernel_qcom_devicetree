@@ -258,7 +258,11 @@
 		compatible = "android,firmware";
 		vbmeta {
 			compatible = "android,vbmeta";
-			parts = "vbmeta,boot,system,vendor,dtbo";
+			//#ifdef OPLUS_FEATURE_BOOT_SECURITY
+			parts = "vbmeta,boot,system,vendor,dtbo,vendor_boot";
+			//#else
+			//parts = "vbmeta,boot,system,vendor,dtbo";
+			//#endif
 		};
 
 		fstab {
@@ -2467,6 +2471,19 @@
 		qcom,client-id = <0x00000001>;
 		qcom,vm-nav-path;
 	};
+
+    //#ifdef VENDOR_EDIT
+    //#ifdef FEATURE_OPLUS_NV_BACKUP
+    //add for creating a shared memory with uio for nv backup and restore
+    qcom,oembackup_sharedmem@0 {
+        compatible = "qcom,sharedmem-uio";
+        reg = <0x0 0x280000>;
+        reg-names = "oembackup";
+        qcom,client-id = <0x00000004>;
+        qcom,guard-memory;
+    };
+    //#endif /* FEATURE_OPLUS_NV_BACKUP */
+    //#endif /* VENDOR_EDIT */
 
 	ufsphy_mem: ufsphy_mem@4807000 {
 		reg = <0x4807000 0xDDC>;
